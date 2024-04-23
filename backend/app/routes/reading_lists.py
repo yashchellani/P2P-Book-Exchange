@@ -8,7 +8,7 @@ reading_lists_blueprint = Blueprint('reading_lists', __name__)
 
 @reading_lists_blueprint.route('/users/books/wishlist', methods=['POST'])
 def add_to_wishlist():
-    data = request.get_json()
+    data = request.json
     user_id = data.get('user_id')
     book_ids = data.get('book_ids', [])
     if not book_ids:

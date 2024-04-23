@@ -39,18 +39,18 @@ def handle_db_error(error_message):
 # Utility function to search for available books
 def search_book_by_keywords(**kwargs):
     result = []
-    if "title" in kwargs:
+    if "title" in kwargs and kwargs['title']:
         keyword = f"%{kwargs['title']}%"
         title_books = Book.query.filter(Book.title.ilike(keyword)).all()
         result.extend(title_books)
 
-    if "author" in kwargs:
+    if "author" in kwargs and kwargs['author']:
         keyword = f"%{kwargs['author']}%"
         author_books = Book.query.filter(Book.author.ilike(keyword)).all()
         result.extend(author_books)
 
-    if "isbn" in kwargs:
-        isbn_books = Book.query.filter_by(isbn=kwargs['ISBN']).all()
+    if "isbn" in kwargs and kwargs['isbn']:
+        isbn_books = Book.query.filter_by(isbn=kwargs['isbn']).all()
         result.extend(isbn_books)
 
     if not result:

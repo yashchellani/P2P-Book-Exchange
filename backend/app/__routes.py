@@ -46,7 +46,7 @@ def handle_db_error(error_message):
 # Route to create a new user
 @routes_blueprint.route('/users', methods=['POST'])
 def create_user():
-    data = request.get_json()
+    data = request.json
     required_fields = ['username', 'email', 'password']
     if not all(field in data for field in required_fields):
         return jsonify({'error': 'Missing required fields'}), 400
@@ -88,7 +88,7 @@ def get_books():
 # Route to create a new book
 @routes_blueprint.route('/books', methods=['POST'])
 def create_book():
-    data = request.get_json()
+    data = request.json
     required_fields = ['isbn', 'title', 'author', 'owner_id']
     if not all(field in data for field in required_fields):
         return jsonify({'error': 'Missing required fields'}), 400
@@ -116,7 +116,7 @@ def update_book(book_id):
     book = Book.query.get(book_id)
     if not book:
         return jsonify({'error': 'Book not found'}), 404
-    data = request.get_json()
+    data = request.json
     required_fields = ['title', 'author', 'owner_id', 'quantity']
     if not all(field in data for field in required_fields):
         return jsonify({'error': 'Missing required fields'}), 400
@@ -157,7 +157,7 @@ def get_user_books(user_id):
 # Route to request for book exchange
 @routes_blueprint.route('/books/<int:book_id>/exchange', methods=['POST'])
 def exchange_book(book_id):
-    data = request.get_json()
+    data = request.json
     user_id = data.get('user_id')
     if not user_id:
         return jsonify({'error': 'User ID is required'}), 400
@@ -184,7 +184,7 @@ def exchange_book(book_id):
 # Route to add books to reading list
 @routes_blueprint.route('/users/<int:user_id>/books/read', methods=['POST'])
 def add_to_reading_list(user_id):
-    data = request.get_json()
+    data = request.json
     book_ids = data.get('book_ids', [])
     if not book_ids:
         return jsonify({'error': 'Book IDs are required'}), 400
@@ -202,7 +202,7 @@ def add_to_reading_list(user_id):
 # Route to rate a book
 @routes_blueprint.route('/books/rate', methods=['POST'])
 def rate_book():
-    data = request.get_json()
+    data = request.json
     user_id = data.get('user_id')
     book_id = data.get('book_id')
     rating = data.get('rating')

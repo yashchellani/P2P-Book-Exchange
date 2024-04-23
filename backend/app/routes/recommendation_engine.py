@@ -1,16 +1,14 @@
-import openai
+from openai import OpenAI
 
-openai.api_key = "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"
+client = OpenAI()
 
-def get_recommendations_from_ai(book_names):    
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "You are recommending books to a user based on \
-             an ordered list of their preferences. Return only a numbered list of the book ISBN and Title in the format 'ISBN: Title'."},
-            {"role": "user", "content": f"These are the book names, in order of preference: {book_names}"},
+def get_recommendations_from_ai(book_names, existing_books):    
 
-        ]
+    completion = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {"role": "system", "content": "You are recommending books based on a list of user preferences. Do not include any other information in your response. Only return a string of the book titles separated by commas."},
+        {"role": "user", "content": f"Recommend new books based on the following list: {book_names}. Only choose books from the following list: {existing_books}"},
+    ]
     )
-
-    return response
+    print(completion.choices[0].message.content)

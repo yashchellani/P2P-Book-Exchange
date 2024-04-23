@@ -1,9 +1,11 @@
 from flask import Flask
 from models import db, ownership
 from routes import users_blueprint, books_blueprint, ratings_blueprint, reading_lists_blueprint, exchange_blueprint
+from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
 
     # SQLite DB configuration
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///book_exchange.db'

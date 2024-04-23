@@ -8,7 +8,7 @@ users_blueprint = Blueprint('users', __name__)
 
 @users_blueprint.route('/users', methods=['POST'])
 def create_user():
-    data = request.get_json()
+    data = request.json
     new_user = User(username=data['username'], email=data['email'], password=data['password'])
     db.session.add(new_user)
     try:
@@ -18,6 +18,18 @@ def create_user():
     except SQLAlchemyError as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
+# login
+@users_blueprint.route('/users/login', methods=['POST'])
+def login():
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    if user.password != password:
+        return jsonify({'error': 'Invalid password'}), 401
+    return jsonify({'message': 'Login successful', 'user_id': user.id}), 200
 
 @users_blueprint.route('/users', methods=['GET'])
 def get_users():

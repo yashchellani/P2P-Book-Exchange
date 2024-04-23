@@ -13,7 +13,7 @@ def validate_rating_data(data, required_fields):
 
 @ratings_blueprint.route('/books/rate', methods=['POST'])
 def rate_book():
-    data = request.get_json()
+    data = request.json
     required_fields = ['user_id', 'book_id', 'rating']
     if not validate_rating_data(data, required_fields):
         return jsonify({'error': 'Missing required fields'}), 400
@@ -42,7 +42,7 @@ def rate_book():
 
 @ratings_blueprint.route('/users/rate', methods=['POST'])
 def rate_user():
-    data = request.get_json()
+    data = request.json
     required_fields = ['rater_id', 'rated_id', 'rating']
     if not validate_rating_data(data, required_fields):
         return jsonify({'error': 'Missing required fields'}), 400
