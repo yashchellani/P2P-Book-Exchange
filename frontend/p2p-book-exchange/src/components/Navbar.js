@@ -4,7 +4,12 @@ import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { AppContext } from '../AppContext';
 
 function Navbar() {
-  const { user_id } = useContext(AppContext);
+  const { user_id, setUser_id } = useContext(AppContext);
+
+  const handleLogout = () => {
+    // Clear user_id on logout
+    setUser_id(null);
+  };
 
   return (
     <AppBar position="static">
@@ -13,12 +18,13 @@ function Navbar() {
           Heymax.ai Book Exchange
         </Typography>
         <Box sx={{ marginLeft: 'auto' }}>
-          {(user_id !== '' || user_id != undefined) ? (
+          {(user_id != null) ? (
             <>
+            {console.log("user_id: ", user_id)}
               <Typography variant="h6">
                 Hello, User {user_id}
               </Typography>
-              <Button component={Link} to="/profile" color="inherit">Profile</Button>
+              
             </>
           ) : (
             <>
@@ -28,6 +34,7 @@ function Navbar() {
           )}
           <Button component={Link} to="/books" color="inherit">Books</Button>
           <Button component={Link} to="/explore" color="inherit">Explore</Button>
+          <Button onClick={handleLogout} color="inherit">Logout</Button>
         </Box>
       </Toolbar>
     </AppBar>

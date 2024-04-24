@@ -24,9 +24,9 @@ const useStyles = makeStyles({
     },
     tableHead: {
        backgroundColor: '#f5f5f5',
-       position: 'sticky', // Make the table head sticky
-       top: 0, // Align the table head to the top
-       zIndex: 100, // Ensure the table head stays on top of the table body
+       position: 'sticky', 
+       top: 0, 
+       zIndex: 100, 
     },
     tableCell: {
        fontSize: 14,
@@ -36,10 +36,9 @@ const useStyles = makeStyles({
          backgroundColor: '#fafafa',
        },
     },
-    // Adjust the scrollableTable class to include overflowY for vertical scrolling
     scrollableTable: {
-       maxHeight: 440, // Set the maximum height of the table
-       overflowY: 'auto', // Enable vertical scrolling
+       maxHeight: 440,
+       overflowY: 'auto',
     },
    });
    const exchangeStatus = ["", "pending", "rejected", "completed"]
@@ -133,7 +132,6 @@ const useStyles = makeStyles({
             if (response.ok) {
                 const data = await response.json();
                 console.log(data);
-                // Fetch the borrowed books again to update the list after the exchange
                 const borrowedBooksResponse = await fetch(`http://127.0.0.1:5000/users/${user_id}/books/borrowed`);
                 if (borrowedBooksResponse.ok) {
                     const borrowedBooksData = await borrowedBooksResponse.json();
@@ -228,9 +226,9 @@ const useStyles = makeStyles({
 
     return (
         <div>
-            <Typography variant="h4">Profile Dashboard</Typography>
-            <Typography variant="body1">User ID: {user_id}</Typography>
-            <Button onClick={handleLogout} variant="contained" color="primary">Logout</Button>
+            <Typography variant="h4">Dashboard</Typography>
+            {/* <Typography variant="body1">User ID: {user_id}</Typography> */}
+            {/* <Button onClick={handleLogout} variant="contained" color="primary">Logout</Button> */}
 
             <Box mt={4}>
                 <Typography variant="h5">Your Books</Typography>
@@ -272,7 +270,6 @@ const useStyles = makeStyles({
             <Box mt={4}>
                 <Typography variant="h5">Borrowed Books</Typography>
                 <TableContainer component={Paper}>
-                    {/* Wrap the Table in a div with the scrollableTable class */}
                     <div className={classes.scrollableTable}>
                         <Table className={classes.table} aria-label="simple table">
                             <TableHead className={classes.tableHead}>
