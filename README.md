@@ -1,11 +1,10 @@
 # P2P Book Exchange
-This is an application that supports p2p book exchange. Users can create an account, add books to their library, and request books from other users. The application also supports a rating system for users and books. 
+This application facilitates peer-to-peer book exchanges. Users can create an account, build their book library, and request books from other users. Additionally, the platform includes a rating system for both users and books.
 
-The features in this application have been inspired by a need to simplify the process of book exchange, while making it more engaging and inclusive. 
-
+Designed to streamline the book exchange process, this application aims to make book sharing more engaging and inclusive.
 
 # Setup
-This project consists of a backend and frontend. The backend is a Flask server and the frontend is a React app.
+This project comprises both backend and frontend components. The backend is built using Flask, while the frontend is a React application. The database used is SQLite, and the application is hosted locally.
 
 Requirements:
 - Python 3.12.2
