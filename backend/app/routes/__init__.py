@@ -6,11 +6,13 @@ from .reading_lists import reading_lists_blueprint
 from .exchange import exchange_blueprint
 from models import db
 
-routes_blueprint = Blueprint('routes', __name__)
+routes_blueprint = Blueprint("routes", __name__)
+
 
 @routes_blueprint.before_app_request
 def create_tables():
     db.create_all()
+
 
 routes_blueprint.register_blueprint(users_blueprint)
 routes_blueprint.register_blueprint(books_blueprint)
