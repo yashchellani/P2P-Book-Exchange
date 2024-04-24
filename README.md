@@ -4,7 +4,7 @@ This application facilitates peer-to-peer book exchanges. Users can create an ac
 Designed to streamline the book exchange process, this application aims to make book sharing more engaging and inclusive.
 
 # Setup
-This project comprises both backend and frontend components. The backend is built using Flask, while the frontend is a React application. The database used is SQLite, and the application is hosted locally.
+This project comprises both backend and frontend components. The backend is built using Flask, while the frontend is a React application. The database used is SQLite, and the application is hosted locally. Please refer to the setup section below for full instructions on testing the app's features.
 
 Requirements:
 - Python 3.12.2
@@ -37,7 +37,7 @@ npm start
 
 ## Solution Approach and Design
 
-Given that the 3 key pillars of the are:
+The 3 key pillars of the solution are:
 - Easy Searching of Books
 - Easy Listing of Books
 - Easy Exchanging of Books
@@ -72,6 +72,13 @@ Otherwise, you can also add books one by one in the frontend.
 
 ## Ratings System
 - Users can rate books and other users. As a community driven platform, prioritising listings by crowd opinion is, in the best case scenario, going to lead to higher levels of engagement and user satisfaction. As such, this feature is centered around prioritising listings by ratings. So far, this is a backend-only implementation, and I did not manage to integrate it into the frontend.
+
+## Testing
+For end-user testing, 2 user accounts have been configured in the SQLite database. You can use these to test the exchange functionality. The user accounts are:
+- User 1: username - `user1`, password - `user1`
+- User 2: username - `user2`, password - `user2`
+
+Both users come with a pre-loaded set of books, and you can use these to test the exchange functionality, as well as other features.
 
 ### User Journey
 **Initial**
