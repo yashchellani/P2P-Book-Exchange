@@ -53,7 +53,7 @@ I recommend running this endpoint before testing out everything: https://chellan
 Otherwise, you can also add books one by one in the frontend.
 
 - Registration/Login
-    - I kept this barebones, with just a username and password. I would have liked to add a proper auth system, but I prioritised other features for this POC, as registration/login is a solved problem and might not be the most essentiual in demonstrating the product-market fit.
+    - I kept this barebones, with just a username and password. I would have liked to add a proper auth system, but I prioritised other features for this POC, as registration/login is a solved problem and might not be the most essential in demonstrating the product-market fit.
 - User Profile and Control Center
     Here, I took inspiration from existing successful P2P platforms such as Carousell, where the user's home page has a lot of information pertaining to the user's activity on the platform. This helps act as a control center for the user, and also helps in user engagement.
     - Users can view their profile, and see their ratings and books.
