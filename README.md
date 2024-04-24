@@ -44,6 +44,11 @@ I prioritised features that encompass as much of these as possible, while still 
 As such, the key features of the application are:
 
 ## User Lifecycle
+
+I recommend running this endpoint before testing out everything: https://chellani.notion.site/Example-Request-Body-for-Bulk-Add-Books-8e7df73bc14d485b9fe68ba546e121aa
+
+Otherwise, you can also add books one by one in the frontend.
+
 - Registration/Login
     - I kept this barebones, with just a username and password. I would have liked to add a proper auth system, but I prioritised other features for this POC, as registration/login is a solved problem and might not be the most essentiual in demonstrating the product-market fit.
 - User Profile and Control Center
