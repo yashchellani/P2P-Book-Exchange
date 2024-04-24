@@ -7,6 +7,10 @@ The features in this application have been inspired by a need to simplify the pr
 # Setup
 This project consists of a backend and frontend. The backend is a Flask server and the frontend is a React app.
 
+Requirements:
+- Python 3.12.2
+- npm 10.5.0
+
 ## Backend
 The full API reference is available here: https://chellani.notion.site/P2P-Book-Exchange-API-Reference-0c6be3ff363940a1812191c0676a4bfd?pvs=4
 
