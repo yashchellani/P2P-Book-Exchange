@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from models import db, ownership, WaitingList, BookExchange, BookExchangeStatus
+from models import db, ownership, WaitingList, BookExchange, BookExchangeStatus, Book
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import and_
 from .utils import get_user_by_id
@@ -29,6 +29,7 @@ def exchange_book(book_id):
         and_(ownership.c.book_isbn == book_id, ownership.c.quantity > 0)
     )
     owners = db.session.execute(owners).all()
+    
     if owners:
         selected_owner = owners[0]
         new_quantity = selected_owner.quantity - 1
@@ -80,3 +81,26 @@ def update_exchange_status(book_id, buyer):
         db.session.execute(delete)
     db.session.commit()
     return jsonify({"message": "Exchange status updated successfully"}), 200
+
+
+@exchange_blueprint.route("/books/exchange/<int:seller_id>", methods=["GET"])
+def get_exchange_status_for_seller(seller_id):
+    user = get_user_by_id(seller_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    books = BookExchange.query.filter_by(seller=seller_id).all()
+    result = []
+    for book in books:
+        book_info = Book.query.filter_by(isbn=book.book_isbn).first()
+        book.title = book_info.title
+        book.author = book_info.author
+        result.append(
+            {
+                "isbn": book.book_isbn,
+                "title": book.title,
+                "author": book.author,
+                "status": book.status.value,
+                "buyer": book.buyer
+            }
+        )
+    return jsonify(result), 200

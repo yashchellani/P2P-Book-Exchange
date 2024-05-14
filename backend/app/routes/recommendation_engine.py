@@ -13,8 +13,9 @@ def get_recommendations_from_ai(book_names, existing_books):
             },
             {
                 "role": "user",
-                "content": f"Recommend similar new books that are a close match to the following {book_names}. Choose new books from the following list: {existing_books}",
+                "content": f"Recommend up to 5 similar new books that are a close match in terms of genre to the following {book_names}. Choose new books from the following list: {existing_books}, or other very similar books.",
             },
         ],
     )
+    print(completion.choices[0].message.content)
     return completion.choices[0].message.content.split(",")

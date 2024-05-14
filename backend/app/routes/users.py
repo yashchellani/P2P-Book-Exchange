@@ -1,6 +1,6 @@
 # users.py
 from flask import Blueprint, jsonify, request
-from models import db, User, ownership, Book, WishList, BookExchange
+from models import db, User, ownership, Book, WishList, BookExchange, BookRating
 from sqlalchemy.exc import SQLAlchemyError
 from .utils import get_user_by_id
 from flask_cors import CORS
@@ -70,18 +70,33 @@ def get_user_books(user_id):
     res = db.session.execute(books).all()
     isbn_list = [row.book_isbn for row in res]
     books = Book.query.filter(Book.isbn.in_(isbn_list)).all()
-    result = [
-        {"isbn": book.isbn, "title": book.title, "author": book.author}
-        for book in books
-    ]
+    book_ratings = BookRating.query.filter(BookRating.user_id == user_id).all()
+    ratings = {rating.book_isbn: rating.rating for rating in book_ratings}
+    # result = [
+    #     {"isbn": book.isbn, "title": book.title, "author": book.author}
+    #     for book in books
+    # ]
+    result = []
+    for book in books:
+        rating = ratings.get(book.isbn)
+        result.append(
+            {
+                "isbn": book.isbn,
+                "title": book.title,
+                "author": book.author,
+                "rating": rating,
+            }
+        )
     return jsonify(result), 200
 
 
-@users_blueprint.route("/users/<int:book_id>/wishlist", methods=["POST"])
-def add_to_wishlist(book_id):
+@users_blueprint.route("/users/wishlist", methods=["POST"])
+def add_to_wishlist():
     data = request.json
     user_id = data.get("user_id")
+    book_id = data.get("book_id")
     if not user_id:
+        print(data)
         return jsonify({"error": "User ID is required"}), 400
 
     user = get_user_by_id(user_id)
@@ -125,3 +140,24 @@ def get_borrowed_books(user_id):
         )
 
     return jsonify(result), 200
+
+# remove book from wishlist
+@users_blueprint.route("/users/wishlist", methods=["DELETE"])
+def remove_from_wishlist():
+    data = request.json
+    user_id = data.get("user_id")
+    book_id = data.get("book_isbn")
+    print(user_id, book_id)
+    if not user_id:
+        return jsonify({"error": "User ID is required"}), 400
+
+    user = get_user_by_id(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    # delete the book from wishlist
+    WishList.query.filter_by(user_id=user_id, book_isbn=book_id).delete()
+    db.session.commit()
+    
+
+    return jsonify({"message": "Book removed from wishlist"}), 200

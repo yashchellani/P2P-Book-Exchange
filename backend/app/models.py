@@ -47,7 +47,7 @@ class WishList(db.Model):
     book = db.relationship("Book", backref=db.backref("wish_list", lazy="dynamic"))
 
     def __repr__(self):
-        return "<ReadingList %r>" % self.id
+        return str([self.user_id, self.book_isbn])
 
 
 class BookRating(db.Model):
@@ -93,7 +93,7 @@ class BookExchange(db.Model):
     book = db.relationship("Book", backref=db.backref("book_exchange", lazy="dynamic"))
 
     def __repr__(self):
-        return "<BookExchange %r>" % self.id
+        return str([self.seller, self.buyer, self.status, self.book_isbn])
 
 
 # intermediate table for many-to-many relationship between User and Book

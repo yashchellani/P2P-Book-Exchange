@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+import random
 from models import db, Book, ownership, WaitingList, WishList, BookRating, BookExchange
 from sqlalchemy import and_
 from .utils import (
@@ -40,6 +41,7 @@ def get_books():
     return jsonify(result), 200
 
 
+#deprecated method, do not use
 @books_blueprint.route("/books", methods=["POST"])
 def create_book():
     data = request.json
@@ -62,7 +64,10 @@ def create_book():
 
 @books_blueprint.route("/books/add", methods=["POST"])
 def add_books():
-    """add multiple books at one go"""
+    """
+    add multiple books at one go
+    allow multiple people to list the same isbn
+    """
     data = request.json
     for book in data:
         user_id = book["owner_id"]
@@ -94,6 +99,10 @@ def search_book():
 
 @books_blueprint.route("/books/recommendations", methods=["POST"])
 def get_recommendations():
+    """
+    sample 20 random books that a user might have interacted with based on their wishlist, past ratings, and books given away
+    using the list of other available books, get recommendations from the AI model
+    """
     data = request.json
     user_id = data.get("user_id")
     if not user_id:
@@ -102,20 +111,28 @@ def get_recommendations():
     if not user:
         return jsonify({"error": "User not found"}), 404
 
+    # get books that the user has interacted with
     wishlist = WishList.query.filter_by(user_id=user_id).all()
-    past_ratings = BookRating.query.filter_by(user_id=user_id).all()
-
+    past_ratings = BookRating.query.filter(and_(BookRating.user_id == user_id, BookRating.rating >= 4)).all()
+    books_sold = BookExchange.query.filter_by(seller=user_id).all()
+    
     book_names = [
         Book.query.filter_by(isbn=item.book_isbn).first()
-        for item in wishlist + past_ratings
+        for item in wishlist + past_ratings + books_sold
     ]
-    books_in_database = Book.query.all()
-    existing_books = [(book.isbn, book.title) for book in books_in_database][:30]
+
+    # randomly sample 20 books from book_names
+    book_names = random.sample(book_names, min(20, len(book_names)))
+
+    # get books not  currentlyowned by the user
+    owns = ownership.select().where(ownership.c.user_id != user_id)
+    res = db.session.execute(owns).all()
+    existing_books = [row.book_isbn for row in res][:30]
 
     recommendations = get_recommendations_from_ai(book_names, existing_books)
     result = []
     for recommendation in recommendations:
-        book = Book.query.filter_by(title=recommendation.strip()).first()
+        book = Book.query.filter_by(isbn=recommendation.strip()).first()
         if book:
             result.append(
                 {"isbn": book.isbn, "title": book.title, "author": book.author}
